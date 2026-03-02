@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AOL-Style Chat Room</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <!-- Username Entry Screen -->
+    <div id="username-screen" class="screen active">
+        <div class="container">
+            <div class="logo">
+                <h1>🌐 AOL Chat</h1>
+                <p class="tagline">Welcome to the 90s!</p>
+            </div>
+            <div class="form-box">
+                <h2>Choose Your Screen Name</h2>
+                <input 
+                    type="text" 
+                    id="username-input" 
+                    placeholder="Enter username (2-20 characters)" 
+                    maxlength="20"
+                    autocomplete="off"
+                />
+                <button id="username-submit" class="btn btn-primary">Continue</button>
+                <p class="info-text">No registration required. Your username is temporary.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Room List Screen -->
+    <div id="room-list-screen" class="screen">
+        <div class="container">
+            <div class="header-bar">
+                <h1>🌐 AOL Chat Rooms</h1>
+                <p class="username-display">Logged in as: <span id="current-username"></span></p>
+            </div>
+            
+            <div class="room-list-container">
+                <h2>Available Chat Rooms</h2>
+                <div id="room-list" class="room-list">
+                    <!-- Rooms will be populated here -->
+                </div>
+                
+                <div class="room-actions">
+                    <button id="create-room-btn" class="btn btn-secondary">Create Private Room</button>
+                    <button id="refresh-rooms-btn" class="btn btn-secondary">Refresh List</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Room Screen -->
+    <div id="chat-screen" class="screen">
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="room-info">
+                    <h2 id="current-room-name">Room Name</h2>
+                    <span id="room-user-count" class="user-count">0 users</span>
+                </div>
+                <button id="leave-room-btn" class="btn btn-danger">Leave Room</button>
+            </div>
+            
+            <div class="chat-body">
+                <div class="user-list-panel">
+                    <h3>Users Online</h3>
+                    <div id="user-list">
+                        <!-- Users will be populated here -->
+                    </div>
+                </div>
+                
+                <div class="chat-main">
+                    <div id="message-area" class="message-area">
+                        <!-- Messages will appear here -->
+                    </div>
+                    
+                    <div class="message-input-container">
+                        <input 
+                            type="text" 
+                            id="message-input" 
+                            placeholder="Type your message..." 
+                            maxlength="500"
+                            autocomplete="off"
+                        />
+                        <button id="send-message-btn" class="btn btn-primary">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Room Modal -->
+    <div id="create-room-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create Private Room</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <label for="room-name-input">Room Name</label>
+                <input 
+                    type="text" 
+                    id="room-name-input" 
+                    placeholder="Enter room name (3-30 characters)" 
+                    maxlength="30"
+                    autocomplete="off"
+                />
+                
+                <label for="room-password-input">Password</label>
+                <input 
+                    type="password" 
+                    id="room-password-input" 
+                    placeholder="Enter password (minimum 4 characters)" 
+                    autocomplete="off"
+                />
+                
+                <button id="create-room-submit" class="btn btn-primary">Create Room</button>
+                <p class="info-text">Private rooms require a password to join</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Join Private Room Modal -->
+    <div id="join-room-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Join Private Room</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Room: <strong id="joining-room-name"></strong></p>
+                
+                <label for="join-room-password-input">Password</label>
+                <input 
+                    type="password" 
+                    id="join-room-password-input" 
+                    placeholder="Enter room password" 
+                    autocomplete="off"
+                />
+                
+                <button id="join-room-submit" class="btn btn-primary">Join Room</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error/Notification Toast -->
+    <div id="notification-toast" class="notification-toast">
+        <span id="notification-message"></span>
+    </div>
+
+    <!-- Connection Status Indicator -->
+    <div id="connection-status" class="connection-status connected">
+        <span class="status-dot"></span>
+        <span class="status-text">Connected</span>
+    </div>
+
+    <!-- Socket.IO Client -->
+    <script src="/socket.io/socket.io.js"></script>
+    
+    <!-- Main Application -->
+    <script src="/js/app.js"></script>
+</body>
+</html>

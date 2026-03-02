@@ -1,0 +1,29 @@
+{
+  "name": "chatroom",
+  "version": "1.0.0",
+  "description": "Retro AOL-style chat room with real-time messaging",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matthewjyhan/chatroom.git"
+  },
+  "keywords": ["chat", "websocket", "real-time", "aol", "socket.io"],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/matthewjyhan/chatroom/issues"
+  },
+  "homepage": "https://github.com/matthewjyhan/chatroom#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.2.1",
+    "helmet": "^8.1.0",
+    "socket.io": "^4.8.3"
+  }
+}
