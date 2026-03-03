@@ -199,6 +199,7 @@ function handleUsernameSubmit() {
     }
     
     appState.username = username;
+    socket.emit('set-username', { username });
     currentUsernameDisplay.textContent = username;
     showScreen('room-list');
 }
@@ -482,6 +483,10 @@ leaveRoomBtn.addEventListener('click', () => {
 socket.on('connect', () => {
     console.log('Connected to server');
     updateConnectionStatus(true);
+
+    if (appState.username) {
+        socket.emit('set-username', { username: appState.username });
+    }
 });
 
 socket.on('disconnect', () => {
@@ -510,7 +515,6 @@ socket.on('room-list', (rooms) => {
 // Room created
 socket.on('room-created', (data) => {
     showNotification(`Room "${data.roomName}" created successfully!`, true);
-    socket.emit('get-rooms');
 });
 
 // Join success

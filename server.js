@@ -360,16 +360,38 @@ io.on('connection', (socket) => {
     socket.on('get-rooms', () => {
         socket.emit('room-list', getRoomList());
     });
+
+    // Set username for this session
+    socket.on('set-username', (data) => {
+        const submittedUsername = sanitizeInput(data?.username || '');
+
+        if (!submittedUsername || submittedUsername.length < 2 || submittedUsername.length > 20) {
+            socket.emit('error-message', 'Username must be between 2 and 20 characters');
+            return;
+        }
+
+        const user = users[socket.id];
+        if (user) {
+            user.username = submittedUsername;
+        }
+    });
     
     // Create private room
     socket.on('create-room', async (data) => {
         try {
             const roomName = sanitizeInput(data.roomName);
             const password = data.password;
+            const user = users[socket.id];
+            const username = user?.username;
             
             // Validate input
             if (!roomName || roomName.length < 3 || roomName.length > 30) {
                 socket.emit('error-message', 'Room name must be between 3 and 30 characters');
+                return;
+            }
+
+            if (!username || username.length < 2 || username.length > 20) {
+                socket.emit('error-message', 'Please set a username before creating a room');
                 return;
             }
             
@@ -400,17 +422,51 @@ io.on('connection', (socket) => {
                 users: {},
                 messages: []
             };
+
+            // Leave current room if in one
+            if (user && user.currentRoom) {
+                const oldRoom = rooms[user.currentRoom];
+                if (oldRoom) {
+                    delete oldRoom.users[socket.id];
+                    broadcastSystemMessage(user.currentRoom, `${user.username} has left the room`);
+                    io.to(user.currentRoom).emit('user-list-update', getRoomUsers(user.currentRoom));
+                }
+                socket.leave(user.currentRoom);
+            }
+
+            // Auto-join creator to the new private room
+            const color = assignUserColor(roomName);
+            rooms[roomName].users[socket.id] = { username, color };
+
+            if (user) {
+                user.username = username;
+                user.currentRoom = roomName;
+                user.messageCount = 0;
+                user.lastMessageTime = 0;
+            }
+
+            socket.join(roomName);
             
             // Update IP limits
             ipLimits[clientIP].roomCreations++;
             ipLimits[clientIP].lastRoomCreation = Date.now();
             
             socket.emit('room-created', { roomName });
+
+            socket.emit('join-success', {
+                roomName,
+                username,
+                color,
+                users: getRoomUsers(roomName)
+            });
+
+            broadcastSystemMessage(roomName, `${username} has joined the room`);
+            socket.to(roomName).emit('user-list-update', getRoomUsers(roomName));
             
             // Broadcast updated room list to all clients
             io.emit('room-list', getRoomList());
             
-            console.log(`Room created: ${roomName} by ${socket.id}`);
+            console.log(`Room created and joined: ${roomName} by ${username} (${socket.id})`);
         } catch (error) {
             console.error('Error creating room:', error);
             socket.emit('error-message', 'Failed to create room');
@@ -490,7 +546,7 @@ io.on('connection', (socket) => {
             broadcastSystemMessage(roomName, `${username} has joined the room`);
             
             // Update user list for all in room
-            io.to(roomName).emit('user-list-update', getRoomUsers(roomName));
+            socket.to(roomName).emit('user-list-update', getRoomUsers(roomName));
             
             console.log(`${username} (${socket.id}) joined ${roomName}`);
         } catch (error) {
