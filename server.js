@@ -283,6 +283,56 @@ function getRoomUsers(roomName) {
     }));
 }
 
+/**
+ * Find socket ID by username in a room (case-insensitive)
+ */
+function findSocketByUsername(roomName, username) {
+    const room = rooms[roomName];
+    if (!room) return null;
+    
+    const lowerUsername = username.toLowerCase();
+    const socketId = Object.keys(room.users).find(sid => 
+        room.users[sid].username.toLowerCase() === lowerUsername
+    );
+    
+    return socketId || null;
+}
+
+/**
+ * Parse whisper command from message
+ * Returns { isWhisper: boolean, targetUsername: string, message: string }
+ */
+function parseWhisperCommand(message) {
+    const whisperRegex = /^\/w\s+@(\S+)\s+(.+)$/i;
+    const match = message.match(whisperRegex);
+    
+    if (match) {
+        return {
+            isWhisper: true,
+            targetUsername: match[1],
+            message: match[2]
+        };
+    }
+    
+    return { isWhisper: false, targetUsername: null, message: message };
+}
+
+/**
+ * Extract mentions from message (all @username patterns)
+ * Returns array of usernames
+ */
+function extractMentions(message) {
+    const mentionRegex = /@(\w+)/g;
+    const mentions = [];
+    let match;
+    
+    while ((match = mentionRegex.exec(message)) !== null) {
+        mentions.push(match[1]);
+    }
+    
+    return mentions;
+}
+
 // ============================================
 // SOCKET.IO EVENT HANDLERS
 // ============================================
@@ -605,17 +655,63 @@ io.on('connection', (socket) => {
             return;
         }
         
-        // Broadcast message to room
-        const messageData = {
-            username: user.username,
-            message: message,
-            color: rooms[user.currentRoom].users[socket.id].color,
-            timestamp: Date.now()
-        };
+        // Parse for whisper command
+        const whisperData = parseWhisperCommand(message);
         
-        io.to(user.currentRoom).emit('new-message', messageData);
-        
-        console.log(`Message in ${user.currentRoom} from ${user.username}: ${message}`);
+        if (whisperData.isWhisper) {
+            // Handle whisper message
+            const targetSocketId = findSocketByUsername(user.currentRoom, whisperData.targetUsername);
+            
+            if (!targetSocketId) {
+                socket.emit('error-message', `User "${whisperData.targetUsername}" not found in this room`);
+                return;
+            }
+            
+            if (targetSocketId === socket.id) {
+                socket.emit('error-message', 'You cannot whisper to yourself');
+                return;
+            }
+            
+            const targetUser = rooms[user.currentRoom].users[targetSocketId];
+            
+            // Send whisper to sender
+            socket.emit('whisper-message', {
+                username: user.username,
+                targetUsername: targetUser.username,
+                message: whisperData.message,
+                color: rooms[user.currentRoom].users[socket.id].color,
+                timestamp: Date.now(),
+                isSender: true
+            });
+            
+            // Send whisper to recipient
+            io.to(targetSocketId).emit('whisper-message', {
+                username: user.username,
+                targetUsername: targetUser.username,
+                message: whisperData.message,
+                color: rooms[user.currentRoom].users[socket.id].color,
+                timestamp: Date.now(),
+                isSender: false
+            });
+            
+            console.log(`Whisper in ${user.currentRoom} from ${user.username} to ${targetUser.username}: ${whisperData.message}`);
+        } else {
+            // Handle regular message with mentions
+            const mentions = extractMentions(message);
+            
+            // Broadcast message to room
+            const messageData = {
+                username: user.username,
+                message: message,
+                color: rooms[user.currentRoom].users[socket.id].color,
+                timestamp: Date.now(),
+                mentions: mentions
+            };
+            
+            io.to(user.currentRoom).emit('new-message', messageData);
+            
+            console.log(`Message in ${user.currentRoom} from ${user.username}: ${message}`);
+        }
     });
     
     // Leave room

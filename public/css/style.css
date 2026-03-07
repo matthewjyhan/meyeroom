@@ -384,6 +384,47 @@ label {
     color: #000;
 }
 
+/* Whisper Messages */
+.whisper-message {
+    background: rgba(138, 43, 226, 0.08);
+    padding: 8px;
+    border-left: 3px solid #8A2BE2;
+    border-radius: 4px;
+    margin-bottom: 12px;
+}
+
+.whisper-label {
+    color: #8A2BE2;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 0.9em;
+    margin-right: 5px;
+}
+
+/* Mentioned Messages (highlighted for the mentioned user) */
+.message-mentioned {
+    background: rgba(255, 255, 0, 0.2);
+    padding: 8px;
+    border-left: 3px solid #CCAA00;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    animation: mentionPulse 1s ease-in-out;
+}
+
+@keyframes mentionPulse {
+    0% { background: rgba(255, 255, 0, 0.4); }
+    100% { background: rgba(255, 255, 0, 0.2); }
+}
+
+/* @mentions (highlighted for everyone) */
+.mention {
+    color: #0066CC;
+    font-weight: bold;
+    background: rgba(0, 102, 204, 0.1);
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
 /* System Messages */
 .system-message {
     color: var(--system-color);

@@ -412,9 +412,76 @@ function renderUserList(users) {
 /**
  * Add message to chat
  */
-function addMessage(username, message, color, timestamp) {
+function addMessage(username, message, color, timestamp, mentions) {
     const messageDiv = document.createElement('div');
     messageDiv.className = 'message';
+    
+    // Check if current user is mentioned
+    const isMentioned = mentions && mentions.some(m => 
+        m.toLowerCase() === appState.username.toLowerCase()
+    );
+    
+    if (isMentioned) {
+        messageDiv.classList.add('message-mentioned');
+    }
+    
+    const usernameSpan = document.createElement('span');
+    usernameSpan.className = `message-username user-color-${color}`;
+    usernameSpan.textContent = `[${username}]:`;
+    
+    const messageSpan = document.createElement('span');
+    messageSpan.className = 'message-text';
+    
+    // Parse message for @mentions and highlight them
+    if (mentions && mentions.length > 0) {
+        const parts = [];
+        let lastIndex = 0;
+        const mentionRegex = /@(\w+)/g;
+        let match;
+        
+        while ((match = mentionRegex.exec(message)) !== null) {
+            // Add text before mention
+            if (match.index > lastIndex) {
+                parts.push(document.createTextNode(message.substring(lastIndex, match.index)));
+            }
+            
+            // Add mention as highlighted span
+            const mentionSpan = document.createElement('span');
+            mentionSpan.className = 'mention';
+            mentionSpan.textContent = match[0];
+            parts.push(mentionSpan);
+            
+            lastIndex = match.index + match[0].length;
+        }
+        
+        // Add remaining text
+        if (lastIndex < message.length) {
+            parts.push(document.createTextNode(message.substring(lastIndex)));
+        }
+        
+        // Append all parts to message span
+        parts.forEach(part => messageSpan.appendChild(part));
+    } else {
+        messageSpan.textContent = ` ${message}`;
+    }
+    
+    messageDiv.appendChild(usernameSpan);
+    messageDiv.appendChild(messageSpan);
+    
+    messageArea.appendChild(messageDiv);
+    messageArea.scrollTop = messageArea.scrollHeight;
+}
+
+/**
+ * Add whisper message to chat
+ */
+function addWhisperMessage(username, targetUsername, message, color, timestamp, isSender) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'message whisper-message';
+    
+    const whisperLabel = document.createElement('span');
+    whisperLabel.className = 'whisper-label';
+    whisperLabel.textContent = isSender ? `[Whisper to ${targetUsername}] ` : `[Whisper from ${username}] `;
     
     const usernameSpan = document.createElement('span');
     usernameSpan.className = `message-username user-color-${color}`;
@@ -424,6 +491,7 @@ function addMessage(username, message, color, timestamp) {
     messageSpan.className = 'message-text';
     messageSpan.textContent = ` ${message}`;
     
+    messageDiv.appendChild(whisperLabel);
     messageDiv.appendChild(usernameSpan);
     messageDiv.appendChild(messageSpan);
     
@@ -545,7 +613,12 @@ socket.on('user-list-update', (users) => {
 
 // New message
 socket.on('new-message', (data) => {
-    addMessage(data.username, data.message, data.color, data.timestamp);
+    addMessage(data.username, data.message, data.color, data.timestamp, data.mentions || []);
+});
+
+// Whisper message
+socket.on('whisper-message', (data) => {
+    addWhisperMessage(data.username, data.targetUsername, data.message, data.color, data.timestamp, data.isSender);
 });
 
 // System message
