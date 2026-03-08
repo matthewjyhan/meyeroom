@@ -48,6 +48,7 @@ body {
     display: none;
     min-height: 100vh;
     padding: 20px;
+    position: relative;
 }
 
 .screen.active {
@@ -523,6 +524,63 @@ label {
     padding: 25px;
 }
 
+/* Help Menu Trigger */
+.help-trigger {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 50;
+}
+
+.help-trigger-button {
+    background: var(--white);
+    color: var(--secondary-blue);
+    border: 2px solid var(--secondary-blue);
+    border-radius: 6px;
+    font-size: 0.85em;
+    font-weight: bold;
+    padding: 8px 12px;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+}
+
+.help-trigger-button:hover {
+    background: var(--light-blue);
+}
+
+.help-trigger-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--secondary-blue);
+    background: var(--white);
+    color: var(--secondary-blue);
+    font-size: 1.15em;
+    font-weight: bold;
+    font-family: Georgia, 'Times New Roman', serif;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+}
+
+.help-trigger-icon:hover {
+    background: var(--light-blue);
+}
+
+.help-modal-body p {
+    color: #333;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.help-modal-body code {
+    background: var(--light-gray);
+    border: 1px solid var(--medium-gray);
+    border-radius: 3px;
+    padding: 1px 4px;
+    font-family: 'Courier New', monospace;
+}
+
 /* Notification Toast */
 .notification-toast {
     position: fixed;
@@ -651,6 +709,22 @@ label {
     
     #send-message-btn {
         width: 100%;
+    }
+
+    .help-trigger {
+        top: 10px;
+        right: 10px;
+    }
+
+    .help-trigger-button {
+        font-size: 0.75em;
+        padding: 7px 10px;
+    }
+
+    .help-trigger-icon {
+        width: 34px;
+        height: 34px;
+        font-size: 1em;
     }
 }
 

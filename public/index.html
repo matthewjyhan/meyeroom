@@ -9,6 +9,7 @@
 <body>
     <!-- Username Entry Screen -->
     <div id="username-screen" class="screen active">
+        <button id="help-btn-username" class="help-trigger help-trigger-button" aria-label="Open help menu">How Does This Work?</button>
         <div class="container">
             <div class="logo">
                 <h1>🌐 AOL Chat</h1>
@@ -31,6 +32,7 @@
 
     <!-- Room List Screen -->
     <div id="room-list-screen" class="screen">
+        <button id="help-btn-room-list" class="help-trigger help-trigger-button" aria-label="Open help menu">How Does This Work?</button>
         <div class="container">
             <div class="header-bar">
                 <h1>🌐 AOL Chat Rooms</h1>
@@ -53,6 +55,7 @@
 
     <!-- Chat Room Screen -->
     <div id="chat-screen" class="screen">
+        <button id="help-btn-chat" class="help-trigger help-trigger-icon" aria-label="Open help menu" title="How Does This Work?">i</button>
         <div class="chat-container">
             <div class="chat-header">
                 <div class="room-info">
@@ -140,6 +143,24 @@
                 />
                 
                 <button id="join-room-submit" class="btn btn-primary">Join Room</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div id="help-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>How Does This Work?</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body help-modal-body">
+                <p><strong>1.</strong> Pick a temporary username (2-20 characters).</p>
+                <p><strong>2.</strong> Join any public room or create a private room with a password.</p>
+                <p><strong>3.</strong> Send regular messages to everyone in the room.</p>
+                <p><strong>4.</strong> Mention a user with <code>@username</code>. Everyone sees the mention styled, and the mentioned person sees the whole message highlighted.</p>
+                <p><strong>5.</strong> Send a whisper with <code>/w @username your message</code>. Only you and that user can see it.</p>
+                <p><strong>Tip:</strong> Keep messages respectful and avoid spamming to stay connected.</p>
             </div>
         </div>
     </div>
