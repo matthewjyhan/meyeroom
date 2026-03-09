@@ -714,6 +714,50 @@ io.on('connection', (socket) => {
         }
     });
     
+    // Change user color
+    socket.on('change-color', (data) => {
+        const user = users[socket.id];
+        
+        if (!user || !user.currentRoom) {
+            socket.emit('color-changed', {
+                success: false,
+                message: 'You must be in a room to change color'
+            });
+            return;
+        }
+        
+        const requestedColor = sanitizeInput(data.color || '').toLowerCase();
+        
+        if (!USER_COLORS.includes(requestedColor)) {
+            socket.emit('color-changed', {
+                success: false,
+                message: `Invalid color. Available colors: ${USER_COLORS.join(', ')}`
+            });
+            return;
+        }
+        
+        // Update user color in room
+        const room = rooms[user.currentRoom];
+        if (room && room.users[socket.id]) {
+            room.users[socket.id].color = requestedColor;
+            
+            // Broadcast updated user list to all users in room
+            io.to(user.currentRoom).emit('user-list-update', getRoomUsers(user.currentRoom));
+            
+            // Send success to user
+            socket.emit('color-changed', {
+                success: true,
+                color: requestedColor,
+                message: `Color changed to ${requestedColor}`
+            });
+            
+            // Broadcast system message
+            broadcastSystemMessage(user.currentRoom, `${user.username} changed their color to ${requestedColor}`);
+            
+            console.log(`${user.username} (${socket.id}) changed color to ${requestedColor}`);
+        }
+    });
+    
     // Leave room
     socket.on('leave-room', () => {
         const user = users[socket.id];

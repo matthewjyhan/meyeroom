@@ -526,12 +526,41 @@ function addSystemMessage(message) {
 }
 
 /**
+ * Parse color command from message
+ * Returns { isColorCommand: boolean, color: string }
+ */
+function parseColorCommand(message) {
+    const colorRegex = /^\/color\s+(\w+)$/i;
+    const match = message.match(colorRegex);
+    
+    if (match) {
+        return {
+            isColorCommand: true,
+            color: match[1].toLowerCase()
+        };
+    }
+    
+    return { isColorCommand: false, color: null };
+}
+
+/**
  * Handle send message
  */
 function handleSendMessage() {
     const message = messageInput.value.trim();
     
     if (!message) {
+        return;
+    }
+    
+    // Check for color command
+    const colorData = parseColorCommand(message);
+    
+    if (colorData.isColorCommand) {
+        socket.emit('change-color', {
+            color: colorData.color
+        });
+        messageInput.value = '';
         return;
     }
     
@@ -597,6 +626,16 @@ socket.on('room-list', (rooms) => {
 // Room created
 socket.on('room-created', (data) => {
     showNotification(`Room "${data.roomName}" created successfully!`, true);
+});
+
+// Color changed
+socket.on('color-changed', (data) => {
+    if (data.success) {
+        appState.userColor = data.color;
+        showNotification(`Color changed to ${data.color}!`, true);
+    } else {
+        showNotification(data.message);
+    }
 });
 
 // Join success

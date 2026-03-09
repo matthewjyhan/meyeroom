@@ -16,6 +16,7 @@ A complete, production-ready web-based chat room application inspired by 1990s A
 - **System notifications** for user join/leave/kick events
 - **Rate limiting** to prevent spam
 - **Security features** including XSS prevention, input sanitization, and password hashing
+- **Pinging and whispering** - talk to specific users
 
 ### User Experience
 - Retro 90s AOL-inspired interface
@@ -124,6 +125,9 @@ chatroom/
 - Press Enter or click "Send"
 - See messages appear in real-time with colored usernames
 - View all users in the room on the right panel
+- Ping users with @
+- Whisper to users with /w
+- Change your username color with /color
 
 ### 5. Leave Room
 - Click "Leave Room" button
