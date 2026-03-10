@@ -524,6 +524,23 @@ label {
     padding: 25px;
 }
 
+/* Keep lists in About/Privacy modals aligned and readable */
+.modal-body ul {
+    margin: 10px 0 14px;
+    padding-left: 22px;
+}
+
+.modal-body li {
+    margin-bottom: 6px;
+    line-height: 1.5;
+}
+
+/* Privacy modal needs scrolling for longer content */
+#privacy-modal .modal-body {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
 /* Help Menu Trigger */
 .help-trigger {
     position: absolute;
@@ -858,4 +875,37 @@ label {
 #violation-reload-btn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+}
+
+/* ============================================
+   FOOTER STYLES
+   ============================================ */
+
+.footer {
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: #999;
+    z-index: 100;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.footer-link {
+    color: #ccc;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    cursor: pointer;
+}
+
+.footer-link:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.footer-separator {
+    color: #999;
+    margin: 0 8px;
 }

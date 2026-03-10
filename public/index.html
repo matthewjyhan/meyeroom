@@ -166,6 +166,97 @@
         </div>
     </div>
 
+    <!-- About Modal -->
+    <div id="about-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>About Meyeroom</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Meyeroom</strong> is a nostalgic, web-based chat application inspired by the classic AOL chat rooms of the 1990s. Enjoy the retro vibes!</p>
+                <br>
+                <h3>Features</h3>
+                <ul>
+                    <li>Public chat rooms for general discussion</li>
+                    <li>Private password-protected rooms</li>
+                    <li>User mentions and private whispers</li>
+                    <li>Customizable username colors</li>
+                    <li>No registration required</li>
+                </ul>
+
+                <h3>Our Name</h3>
+                <p> Meyeroom is a play on the words "My" and "Room," using the homophone "eye" to represent a 
+                    search for deeper human connection.
+                </p>
+                <br>
+                
+                <p><strong>Version:</strong> 1.1.0</p>
+                <p><strong>Last Updated:</strong> March 2026</p>
+                
+                <p><strong>GitHub: <a href="https://github.com/matthewjyhan/meyeroom">Click me!</a></strong></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Privacy & Terms Modal -->
+    <div id="privacy-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Privacy & Terms of Use</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h3>Privacy</h3>
+                <p>Meyeroom does not require user registration or collect any personal information. 
+                    All usernames and all chat sessions are temporary and stored only while you are connected. 
+                    Messages are ephemeral and do not persist after all users have left a chatroom. 
+                    No data is shared with third parties. Your internet service provider may have access to
+                    your Meyeroom visit history. Meyeroom is not responsible for content, activity, or actions
+                    taken from or resulting from clicking on links shared by other users.
+                </p>
+                <br>
+
+                <h3>User Guidelines (Acceptable Use)</h3>
+                <p><strong>Do:</strong></p>
+                <ul>
+                    <li>Keep conversations respectful and appropriate</li>
+                    <li>Treat other users with kindness</li>
+                    <li>Report abusive behavior</li>
+                </ul>
+                
+                <p><strong>Don't:</strong></p>
+                <ul>
+                    <li>Spam or flood chat rooms</li>
+                    <li>Harass or bully other users</li>
+                    <li>Share inappropriate content</li>
+                    <li>Attempt to exploit or hack the system</li>
+                    <li>Conduct any illegal activity under any governmental body</li>
+                </ul>
+                <p>Meyeroom reserves the right to suspend or terminate users that violate these rules.</p>
+                <br>
+                
+                <h3>Disclaimer</h3>
+                <p>Meyeroom is provided as-is. 
+                    Users will use Meyeroom for its intended purposes.
+                    Users understand that conversations are shared with others in the room. 
+                    Users understand any and all explicit and implicit privacy concerns mentioned in the privacy statement.
+                    Meyeroom and its developers are not liable for any damages, including legal, social, and emotional, 
+                    while and resulting from using the chatrooms. Users are solely responsible for their actions, 
+                    decisions, and any consequences arising from their use of the platform.
+                    By using Meyeroom, you agree to these terms.
+                </p>
+                <br>
+
+                <h3>Updates to Terms</h3>
+                <p>These terms and conditions can be amended. Continued use of Meyeroom and any of it's services implies acceptance.</p>
+                <br>
+                
+                <p><strong>Last Updated:</strong> March 2026</p>
+            </div>
+        </div>
+    </div>
+
     <!-- Error/Notification Toast -->
     <div id="notification-toast" class="notification-toast">
         <span id="notification-message"></span>
@@ -176,6 +267,13 @@
         <span class="status-dot"></span>
         <span class="status-text">Connected</span>
     </div>
+
+    <!-- Footer Links -->
+    <footer class="footer">
+        <a href="#" id="about-link" class="footer-link">About</a>
+        <span class="footer-separator">|</span>
+        <a href="#" id="privacy-link" class="footer-link">Privacy & Terms</a>
+    </footer>
 
     <!-- Socket.IO Client -->
     <script src="/socket.io/socket.io.js"></script>

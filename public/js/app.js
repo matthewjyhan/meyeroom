@@ -53,6 +53,12 @@ const helpBtnUsername = document.getElementById('help-btn-username');
 const helpBtnRoomList = document.getElementById('help-btn-room-list');
 const helpBtnChat = document.getElementById('help-btn-chat');
 
+// DOM Elements - About and Privacy Modals
+const aboutModal = document.getElementById('about-modal');
+const privacyModal = document.getElementById('privacy-modal');
+const aboutLink = document.getElementById('about-link');
+const privacyLink = document.getElementById('privacy-link');
+
 // DOM Elements - Notifications
 const notificationToast = document.getElementById('notification-toast');
 const notificationMessage = document.getElementById('notification-message');
@@ -356,11 +362,13 @@ document.querySelectorAll('.modal-close').forEach(btn => {
         hideModal(createRoomModal);
         hideModal(joinRoomModal);
         hideModal(helpModal);
+        hideModal(aboutModal);
+        hideModal(privacyModal);
     });
 });
 
 // Close modal when clicking outside
-[createRoomModal, joinRoomModal, helpModal].forEach(modal => {
+[createRoomModal, joinRoomModal, helpModal, aboutModal, privacyModal].forEach(modal => {
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
             hideModal(modal);
@@ -373,6 +381,17 @@ document.querySelectorAll('.modal-close').forEach(btn => {
     btn.addEventListener('click', () => {
         showModal(helpModal);
     });
+});
+
+// Footer link triggers
+aboutLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    showModal(aboutModal);
+});
+
+privacyLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    showModal(privacyModal);
 });
 
 // ============================================
