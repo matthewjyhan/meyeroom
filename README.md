@@ -8,6 +8,11 @@ A complete, production-ready web-based chat room application inspired by 1990s A
 ![Node.js](https://img.shields.io/badge/Node.js-v16+-green)
 ![License](https://img.shields.io/badge/License-ISC-yellow)
 
+
+![Homepage](/images/homepage.png)
+![Room Selection](/images/roomselectionpage.png)
+![Sample Chat](/images/samplechat.png)
+
 ## Features
 
 ### Core Functionality
